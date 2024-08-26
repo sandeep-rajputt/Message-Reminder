@@ -49,3 +49,8 @@ pids/
 # Temporary files
 tmp/
 temp/
+
+
+# other files/folders
+.wwebjs_auth/
+.wwebjs_cache/
