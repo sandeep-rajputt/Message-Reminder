@@ -1,9 +1,9 @@
 import express from "express";
-import "./src/messaging/messageHandler.js";
 import sendOtpNumber from "./src/utils/sendOtpNumber.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import router from "./src/routes/router.js";
+import client from "./src/messaging/client.js";
 dotenv.config();
 
 const app = express();

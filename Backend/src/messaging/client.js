@@ -1,6 +1,14 @@
 import pkg from "whatsapp-web.js";
 const { Client, LocalAuth } = pkg;
 import qrcode from "qrcode-terminal";
+import handleSetMsg from "./handleSetMsg.js";
+import UserData from "../models/userData.model.js";
+import createUser from "../utils/createUser.js";
+import reactUniqueIds from "react-unique-ids";
+import bcrypt from "bcrypt";
+import reScheduleTask from "../utils/reScheduleTask.js";
+import handleList from "./handleList.js";
+import handleDelete from "./handleDelete.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -15,6 +23,33 @@ client.on("qr", (qr) => {
 
 client.on("ready", () => {
   console.log("Client is ready!");
+  reScheduleTask(client);
+});
+
+client.on("message", async (message) => {
+  const chat = await message.getChat();
+  const user = await UserData.findOne({ number: message.from });
+  if (!user) {
+    const password = reactUniqueIds();
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUserData = {
+      number: message.from,
+      password: hashedPassword.toString(),
+    };
+    const createdUser = await createUser(newUserData);
+    if (!createdUser) {
+      chat.sendMessage("Error creating user");
+      return;
+    }
+  }
+
+  if (message.body.startsWith("/setmsg")) {
+    await handleSetMsg(message, client);
+  } else if (message.body.startsWith("/list")) {
+    await handleList(message);
+  } else if (message.body.startsWith("/delete")) {
+    await handleDelete(message, client);
+  }
 });
 
 client.initialize();

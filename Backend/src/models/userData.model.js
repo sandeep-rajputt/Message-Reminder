@@ -15,6 +15,10 @@ const userSchema = new Schema(
       type: Array,
       default: [],
     },
+    premium: {
+      type: Boolean,
+      default: false,
+    },
     password: {
       type: String,
       require: true,
