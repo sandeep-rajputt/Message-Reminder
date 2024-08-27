@@ -9,6 +9,7 @@ import bcrypt from "bcrypt";
 import reScheduleTask from "../utils/reScheduleTask.js";
 import handleList from "./handleList.js";
 import handleDelete from "./handleDelete.js";
+import handleSetEveryDay from "./handleSetEveryDay.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -49,6 +50,8 @@ client.on("message", async (message) => {
     await handleList(message);
   } else if (message.body.startsWith("/delete")) {
     await handleDelete(message, client);
+  } else if (message.body.startsWith("/seteveryday")) {
+    await handleSetEveryDay(message, client);
   }
 });
 

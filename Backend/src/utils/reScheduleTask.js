@@ -1,6 +1,4 @@
-import UserData from "../models/userData.model.js";
 import Reminder from "../models/reminder.model.js";
-import { rescheduleJob } from "node-schedule";
 import { scheduleTask } from "./scheduleTask.js";
 
 async function reScheduleTask(client) {

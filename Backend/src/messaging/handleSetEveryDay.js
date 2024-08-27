@@ -1,24 +1,22 @@
-import client from "./client.js";
-import UserData from "../models/userData.model.js";
 import checkDate from "../utils/checkDate.js";
 import reactUniqueIds from "react-unique-ids";
-import { scheduleTask } from "../utils/scheduleTask.js";
+import { scheduleEverydayTask } from "../utils/scheduleTask.js";
 import Reminder from "../models/reminder.model.js";
+import UserData from "../models/userData.model.js";
 
-async function handleSetMsg(message, client) {
+async function handleSetEveryDay(message, client) {
   const chat = await message.getChat();
   const user = await UserData.findOne({ number: message.from });
-
   const userMessages = user.messages;
   if (userMessages.length > 40) {
     chat.sendMessage(
       "You can set up to 5 reminders. To increase your limit, please use the /upgrade option."
     );
   } else {
-    const date = `${message.body.split(" ")[1]} ${message.body.split(" ")[2]}`;
-    const userMsg = message.body.split(" ").slice(3).join(" ");
+    const date = `${message.body.split(" ")[1]}`;
+    const userMsg = message.body.split(" ").slice(2).join(" ");
     try {
-      checkDate("setmsg", date);
+      checkDate("seteveryday", date);
       const jobId = reactUniqueIds({
         length: 5,
         uppercase: true,
@@ -26,39 +24,28 @@ async function handleSetMsg(message, client) {
         symbol: false,
         number: true,
       });
-      const year = `20${date.split("/")[2].split(" ")[0]}`;
-      const month = date.split("/")[1];
-      const day = date.split("/")[0];
-      const hour = date.split(" ")[1].split(":")[0];
-      const minute = date.split(" ")[1].slice(3, 5);
-      const amPm = date.split(" ")[1].slice(5, 7);
-      scheduleTask(
+      const hour = date.split(":")[0];
+      const minute = date.split(":")[1].slice(0, 2);
+      const amPm = date.split(":")[1].slice(2, 4);
+      scheduleEverydayTask(
         user._id,
         jobId,
         minute,
         hour,
         amPm,
-        day,
-        month,
-        "*",
         userMsg,
         client,
         message.from
       );
-      user.messages.push({
-        jobId: jobId,
-        message: userMsg,
-        date: date,
-      });
-      await user.save();
+
       const newReminder = new Reminder({
         number: message.from,
         message: userMsg,
         userId: user._id,
         time: {
-          year: year,
-          month: month,
-          day: day,
+          year: "*",
+          month: "*",
+          day: "*",
           hour: hour,
           minute: minute,
           amPm: amPm,
@@ -67,6 +54,12 @@ async function handleSetMsg(message, client) {
         jobId: jobId,
       });
       await newReminder.save();
+      user.messages.push({
+        jobId: jobId,
+        message: userMsg,
+        date: date,
+      });
+      await user.save();
       chat.sendMessage("I will notify you at your specified time.");
     } catch (error) {
       chat.sendMessage(error.message);
@@ -75,4 +68,4 @@ async function handleSetMsg(message, client) {
   }
 }
 
-export default handleSetMsg;
+export default handleSetEveryDay;
