@@ -30,34 +30,36 @@ client.on("ready", () => {
 });
 
 client.on("message", async (message) => {
-  const chat = await message.getChat();
-  const user = await UserData.findOne({ number: message.from });
-  if (!user) {
-    const password = reactUniqueIds();
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUserData = {
-      number: message.from,
-      password: hashedPassword.toString(),
-    };
-    const createdUser = await createUser(newUserData);
-    if (!createdUser) {
-      chat.sendMessage("Error creating user");
-      return;
+  if (message.from.endsWith("c.us")) {
+    const chat = await message.getChat();
+    const user = await UserData.findOne({ number: message.from });
+    if (!user) {
+      const password = reactUniqueIds();
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUserData = {
+        number: message.from,
+        password: hashedPassword.toString(),
+      };
+      const createdUser = await createUser(newUserData);
+      if (!createdUser) {
+        chat.sendMessage("Error creating user");
+        return;
+      }
     }
-  }
 
-  if (message.body.startsWith("/setmsg")) {
-    await handleSetMsg(message, client);
-  } else if (message.body.startsWith("/list")) {
-    await handleList(message);
-  } else if (message.body.startsWith("/deleteall")) {
-    await handleDeleteAll(message, client);
-  } else if (message.body.startsWith("/delete")) {
-    await handleDelete(message, client);
-  } else if (message.body.startsWith("/setdaily")) {
-    await handleSetDaily(message, client);
-  } else if (message.body.startsWith("/setweekly")) {
-    await handleSetWeekly(message, client);
+    if (message.body.startsWith("/setmsg")) {
+      await handleSetMsg(message, client);
+    } else if (message.body.startsWith("/list")) {
+      await handleList(message);
+    } else if (message.body.startsWith("/deleteall")) {
+      await handleDeleteAll(message, client);
+    } else if (message.body.startsWith("/delete")) {
+      await handleDelete(message, client);
+    } else if (message.body.startsWith("/setdaily")) {
+      await handleSetDaily(message, client);
+    } else if (message.body.startsWith("/setweekly")) {
+      await handleSetWeekly(message, client);
+    }
   }
 });
 
