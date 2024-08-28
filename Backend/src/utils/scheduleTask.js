@@ -65,7 +65,6 @@ async function deleteTask(userId, id, number, client) {
 }
 
 async function scheduleDailyTask(
-  userId,
   jobId,
   minute,
   hour12,
@@ -87,7 +86,6 @@ async function scheduleDailyTask(
 }
 
 async function scheduleWeeklyTask(
-  userId,
   id,
   minute,
   hour12,
@@ -98,18 +96,44 @@ async function scheduleWeeklyTask(
   number
 ) {
   const hour = convert12To24Hour(hour12, period);
-  const cronString = `${minute} ${hour} * * ${dayOfWeek}`;
+  const week = "";
+  switch (dayOfWeek) {
+    case "Monday" || "Mon" || "mon" || "Mon":
+      week = "1";
+      break;
+    case "Tuesday" || "Tue" || "tue" || "Tue":
+      week = "2";
+      break;
+    case "Wednesday" || "Wed" || "wed" || "Wed":
+      week = "3";
+      break;
+    case "Thursday" || "Thu" || "thu" || "Thu":
+      week = "4";
+      break;
+    case "Friday" || "Fri" || "fri" || "Fri":
+      week = "5";
+      break;
+    case "Saturday" || "Sat" || "sat" || "Sat":
+      week = "6";
+      break;
+    case "Sunday" || "Sun" || "sun" || "Sun":
+      week = "0";
+      break;
+    default:
+      break;
+  }
+  const cronString = `${minute} ${hour} * * ${week}`;
 
   // Create a moment object for the scheduled time
-  const scheduledTime = moment.tz(
-    { minute, hour, date: dayOfMonth, month: month - 1 },
-    "Asia/Kolkata"
-  );
+  const scheduledTime = moment.tz({ minute, hour }, "Asia/Kolkata");
 
   const now = moment.tz("Asia/Kolkata");
 
   try {
-    if (scheduledTime.isBefore(now)) {
+    if (
+      scheduledTime.isBefore(now) &&
+      scheduledTime.isAfter(now.subtract(5, "minutes"))
+    ) {
       client.sendMessage(number, message);
     } else {
       schedule.scheduleJob(id, cronString, () => {

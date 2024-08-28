@@ -10,6 +10,7 @@ import reScheduleTask from "../utils/reScheduleTask.js";
 import handleList from "./handleList.js";
 import handleDelete from "./handleDelete.js";
 import handleSetDaily from "./handleSetDaily.js";
+import handleSetWeekly from "./handleSetWeekly.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -52,6 +53,8 @@ client.on("message", async (message) => {
     await handleDelete(message, client);
   } else if (message.body.startsWith("/setdaily")) {
     await handleSetDaily(message, client);
+  } else if (message.body.startsWith("/setweekly")) {
+    await handleSetWeekly(message, client);
   }
 });
 

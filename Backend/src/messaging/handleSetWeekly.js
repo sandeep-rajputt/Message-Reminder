@@ -1,10 +1,10 @@
 import checkDate from "../utils/checkDate.js";
 import reactUniqueIds from "react-unique-ids";
-import { scheduleDailyTask } from "../utils/scheduleTask.js";
+import { scheduleWeeklyTask } from "../utils/scheduleTask.js";
 import Reminder from "../models/reminder.model.js";
 import UserData from "../models/userData.model.js";
 
-async function handleSetDaily(message, client) {
+async function handleSetWeekly(message, client) {
   const chat = await message.getChat();
   const user = await UserData.findOne({ number: message.from });
   const userMessages = user.messages;
@@ -13,10 +13,10 @@ async function handleSetDaily(message, client) {
       "You can set up to 5 reminders. To increase your limit, please use the /upgrade option."
     );
   } else {
-    const date = `${message.body.split(" ")[1]}`;
-    const userMsg = message.body.split(" ").slice(2).join(" ");
+    const date = `${message.body.split(" ")[1]} ${message.body.split(" ")[2]}`;
+    const userMsg = message.body.split(" ").slice(3).join(" ");
     try {
-      checkDate("setdaily", date);
+      checkDate("setweekly", date);
       const jobId = reactUniqueIds({
         length: 5,
         uppercase: true,
@@ -27,11 +27,14 @@ async function handleSetDaily(message, client) {
       const hour = date.split(":")[0];
       const minute = date.split(":")[1].slice(0, 2);
       const amPm = date.split(":")[1].slice(2, 4);
-      scheduleDailyTask(
+      // HH:MM Day
+      const dayOfWeek = date.split(" ")[2];
+      scheduleWeeklyTask(
         jobId,
         minute,
         hour,
         amPm,
+        dayOfWeek,
         userMsg,
         client,
         message.from
@@ -44,9 +47,10 @@ async function handleSetDaily(message, client) {
           hour: hour,
           minute: minute,
           amPm: amPm,
+          dayOfWeek: dayOfWeek,
         },
         jobId: jobId,
-        msgType: "daily",
+        msgType: "weekly",
       });
       await newReminder.save();
       user.messages.push({
@@ -63,4 +67,4 @@ async function handleSetDaily(message, client) {
   }
 }
 
-export default handleSetDaily;
+export default handleSetWeekly;
