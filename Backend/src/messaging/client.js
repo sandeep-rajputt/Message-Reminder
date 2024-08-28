@@ -11,6 +11,7 @@ import handleList from "./handleList.js";
 import handleDelete from "./handleDelete.js";
 import handleSetDaily from "./handleSetDaily.js";
 import handleSetWeekly from "./handleSetWeekly.js";
+import handleDeleteAll from "./handleDeleteAll.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -49,6 +50,8 @@ client.on("message", async (message) => {
     await handleSetMsg(message, client);
   } else if (message.body.startsWith("/list")) {
     await handleList(message);
+  } else if (message.body.startsWith("/deleteall")) {
+    await handleDeleteAll(message, client);
   } else if (message.body.startsWith("/delete")) {
     await handleDelete(message, client);
   } else if (message.body.startsWith("/setdaily")) {

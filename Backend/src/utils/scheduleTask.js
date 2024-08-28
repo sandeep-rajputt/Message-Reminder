@@ -146,7 +146,6 @@ async function scheduleWeeklyTask(
 }
 
 async function scheduleMonthlyTask(
-  userId,
   id,
   minute,
   hour12,
