@@ -47,6 +47,7 @@ async function handleSetDaily(message, client) {
         },
         jobId: jobId,
         msgType: "daily",
+        userId: user._id,
       });
       await newReminder.save();
       user.messages.push({

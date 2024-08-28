@@ -51,6 +51,7 @@ async function handleSetWeekly(message, client) {
         },
         jobId: jobId,
         msgType: "weekly",
+        userId: user._id,
       });
       await newReminder.save();
       user.messages.push({
