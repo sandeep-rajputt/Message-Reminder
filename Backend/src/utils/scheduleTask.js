@@ -21,13 +21,12 @@ function scheduleTask(
   period,
   dayOfMonth,
   month,
-  dayOfWeek,
   message,
   client,
   number
 ) {
   const hour = convert12To24Hour(hour12, period);
-  const cronString = `${minute} ${hour} ${dayOfMonth} ${month} ${dayOfWeek}`;
+  const cronString = `${minute} ${hour} ${dayOfMonth} ${month} *`;
 
   // Create a moment object for the scheduled time
   const scheduledTime = moment.tz(
@@ -65,9 +64,9 @@ async function deleteTask(userId, id, number, client) {
   }
 }
 
-async function scheduleEverydayTask(
+async function scheduleDailyTask(
   userId,
-  id,
+  jobId,
   minute,
   hour12,
   period,
@@ -79,7 +78,7 @@ async function scheduleEverydayTask(
   const cronString = `${minute} ${hour} * * *`;
 
   try {
-    schedule.scheduleJob(id, cronString, () => {
+    schedule.scheduleJob(jobId, cronString, () => {
       client.sendMessage(number, message);
     });
   } catch (error) {
@@ -160,7 +159,7 @@ async function scheduleMonthlyTask(
 export {
   scheduleTask,
   deleteTask,
-  scheduleEverydayTask,
+  scheduleDailyTask,
   scheduleWeeklyTask,
   scheduleMonthlyTask,
 };

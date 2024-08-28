@@ -22,6 +22,10 @@ const userSchema = new Schema({
     type: String,
     require: true,
   },
+  msgType: {
+    type: String,
+    require: true,
+  },
 });
 
 const Reminder = mongoose.model("Reminder", userSchema);

@@ -40,17 +40,11 @@ async function handleSetMsg(message, client) {
         amPm,
         day,
         month,
-        "*",
         userMsg,
         client,
         message.from
       );
-      user.messages.push({
-        jobId: jobId,
-        message: userMsg,
-        date: date,
-      });
-      await user.save();
+
       const newReminder = new Reminder({
         number: message.from,
         message: userMsg,
@@ -62,11 +56,17 @@ async function handleSetMsg(message, client) {
           hour: hour,
           minute: minute,
           amPm: amPm,
-          dayOfWeek: "*",
         },
         jobId: jobId,
+        msgType: "setMsg",
       });
       await newReminder.save();
+      user.messages.push({
+        jobId: jobId,
+        message: userMsg,
+        date: date,
+      });
+      await user.save();
       chat.sendMessage("I will notify you at your specified time.");
     } catch (error) {
       chat.sendMessage(error.message);

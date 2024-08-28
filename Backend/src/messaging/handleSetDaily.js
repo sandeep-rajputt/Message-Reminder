@@ -1,10 +1,10 @@
 import checkDate from "../utils/checkDate.js";
 import reactUniqueIds from "react-unique-ids";
-import { scheduleEverydayTask } from "../utils/scheduleTask.js";
+import { scheduleDailyTask } from "../utils/scheduleTask.js";
 import Reminder from "../models/reminder.model.js";
 import UserData from "../models/userData.model.js";
 
-async function handleSetEveryDay(message, client) {
+async function handleSetDaily(message, client) {
   const chat = await message.getChat();
   const user = await UserData.findOne({ number: message.from });
   const userMessages = user.messages;
@@ -27,7 +27,7 @@ async function handleSetEveryDay(message, client) {
       const hour = date.split(":")[0];
       const minute = date.split(":")[1].slice(0, 2);
       const amPm = date.split(":")[1].slice(2, 4);
-      scheduleEverydayTask(
+      scheduleDailyTask(
         user._id,
         jobId,
         minute,
@@ -43,15 +43,12 @@ async function handleSetEveryDay(message, client) {
         message: userMsg,
         userId: user._id,
         time: {
-          year: "*",
-          month: "*",
-          day: "*",
           hour: hour,
           minute: minute,
           amPm: amPm,
-          dayOfWeek: "*",
         },
         jobId: jobId,
+        msgType: "daily",
       });
       await newReminder.save();
       user.messages.push({
@@ -68,4 +65,4 @@ async function handleSetEveryDay(message, client) {
   }
 }
 
-export default handleSetEveryDay;
+export default handleSetDaily;
