@@ -9,13 +9,18 @@ async function handleDeleteAll(message, client) {
     chat.sendMessage("You have no reminders.");
     return;
   }
-  user.messages.forEach((message) => {
-    deleteTask(user._id, message.jobId, message.number, client, true);
-  });
-  user.messages = [];
-  await user.save();
-  await Reminder.deleteMany({ userId: user._id });
-  chat.sendMessage("All reminders deleted.");
+  try {
+    user.messages.forEach((message) => {
+      deleteTask(user._id, message.jobId, message.number, client, true);
+    });
+    user.messages = [];
+    await user.save();
+    await Reminder.deleteMany({ userId: user._id });
+    chat.sendMessage("All reminders deleted.");
+  } catch (error) {
+    console.error("Error deleting all reminders:", error);
+    chat.sendMessage("Error deleting all reminders. Please try again later.");
+  }
 }
 
 export default handleDeleteAll;
