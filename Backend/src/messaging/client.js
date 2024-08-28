@@ -12,6 +12,7 @@ import handleDelete from "./handleDelete.js";
 import handleSetDaily from "./handleSetDaily.js";
 import handleSetWeekly from "./handleSetWeekly.js";
 import handleDeleteAll from "./handleDeleteAll.js";
+import handleHelp from "./handleHelp.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -59,6 +60,8 @@ client.on("message", async (message) => {
       await handleSetDaily(message, client);
     } else if (message.body.startsWith("/setweekly")) {
       await handleSetWeekly(message, client);
+    } else if (message.body.startsWith("/help")) {
+      await handleHelp(message, client);
     }
   }
 });
