@@ -5,14 +5,11 @@ import Reminder from "../models/reminder.model.js";
 async function handleDeleteAll(message, client) {
   const chat = await message.getChat();
   const user = await UserData.findOne({ number: message.from });
-  if (user.messages.length === 0) {
-    chat.sendMessage("You have no reminders.");
-    return;
-  }
   try {
     user.messages.forEach((message) => {
       deleteTask(user._id, message.jobId, message.number, client, true);
     });
+
     user.messages = [];
     await user.save();
     await Reminder.deleteMany({ userId: user._id });

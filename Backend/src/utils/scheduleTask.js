@@ -15,7 +15,7 @@ function convert12To24Hour(hour12, period) {
 
 function scheduleTask(
   userId,
-  id,
+  jobId,
   minute,
   hour12,
   period,
@@ -39,11 +39,11 @@ function scheduleTask(
   try {
     if (scheduledTime.isBefore(now)) {
       client.sendMessage(number, message);
-      deleteTask(userId, id, number, client);
+      deleteTask(userId, jobId, number, client);
     } else {
-      schedule.scheduleJob(id, cronString, () => {
+      schedule.scheduleJob(jobId, cronString, () => {
         client.sendMessage(number, message);
-        deleteTask(userId, id, number, client);
+        deleteTask(userId, jobId, number, client);
       });
     }
   } catch (error) {
@@ -51,13 +51,13 @@ function scheduleTask(
   }
 }
 
-async function deleteTask(userId, id, number, client) {
+async function deleteTask(userId, jobId, number, client) {
   try {
     await UserData.findByIdAndUpdate(userId, {
-      $pull: { messages: { jobId: id } },
+      $pull: { messages: { jobId: jobId } },
     });
-    await Reminder.findOneAndDelete({ jobId: id });
-    schedule.cancelJob(id);
+    await Reminder.findOneAndDelete({ jobId: jobId });
+    schedule.cancelJob(jobId);
   } catch (error) {
     console.error("Error deleting task:", error);
     client.sendMessage(number, error);
@@ -76,6 +76,17 @@ async function scheduleDailyTask(
   const hour = convert12To24Hour(hour12, period);
   const cronString = `${minute} ${hour} * * *`;
 
+  // Create a moment object for the scheduled time
+  const scheduledTime = moment.tz({ minute, hour }, "Asia/Kolkata");
+
+  const now = moment.tz("Asia/Kolkata");
+
+  if (
+    scheduledTime.isBefore(now) &&
+    scheduledTime.isAfter(now.subtract(5, "minutes"))
+  ) {
+    client.sendMessage(number, message);
+  }
   try {
     schedule.scheduleJob(jobId, cronString, () => {
       client.sendMessage(number, message);
@@ -86,7 +97,7 @@ async function scheduleDailyTask(
 }
 
 async function scheduleWeeklyTask(
-  id,
+  jobId,
   minute,
   hour12,
   period,
@@ -129,24 +140,23 @@ async function scheduleWeeklyTask(
 
   const now = moment.tz("Asia/Kolkata");
 
+  if (
+    scheduledTime.isBefore(now) &&
+    scheduledTime.isAfter(now.subtract(5, "minutes"))
+  ) {
+    client.sendMessage(number, message);
+  }
   try {
-    if (
-      scheduledTime.isBefore(now) &&
-      scheduledTime.isAfter(now.subtract(5, "minutes"))
-    ) {
+    schedule.scheduleJob(jobId, cronString, () => {
       client.sendMessage(number, message);
-    } else {
-      schedule.scheduleJob(id, cronString, () => {
-        client.sendMessage(number, message);
-      });
-    }
+    });
   } catch (error) {
     throw new Error(error);
   }
 }
 
 async function scheduleMonthlyTask(
-  id,
+  jobId,
   minute,
   hour12,
   period,
@@ -160,20 +170,23 @@ async function scheduleMonthlyTask(
 
   // Create a moment object for the scheduled time
   const scheduledTime = moment.tz(
-    { minute, hour, date: dayOfMonth, month: month - 1 },
+    { minute, hour, date: dayOfMonth },
     "Asia/Kolkata"
   );
 
   const now = moment.tz("Asia/Kolkata");
 
+  if (
+    scheduledTime.isBefore(now) &&
+    scheduledTime.isAfter(now.subtract(5, "minutes"))
+  ) {
+    client.sendMessage(number, message);
+  }
   try {
-    if (scheduledTime.isBefore(now)) {
+    console.log("set : ", message);
+    schedule.scheduleJob(jobId, cronString, () => {
       client.sendMessage(number, message);
-    } else {
-      schedule.scheduleJob(id, cronString, () => {
-        client.sendMessage(number, message);
-      });
-    }
+    });
   } catch (error) {
     throw new Error(error);
   }

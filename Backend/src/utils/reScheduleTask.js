@@ -3,6 +3,7 @@ import {
   scheduleTask,
   scheduleDailyTask,
   scheduleWeeklyTask,
+  scheduleMonthlyTask,
 } from "./scheduleTask.js";
 
 async function reScheduleTask(client) {
@@ -39,6 +40,17 @@ async function reScheduleTask(client) {
         reminder.time.hour,
         reminder.time.amPm,
         reminder.time.dayOfWeek,
+        reminder.message,
+        client,
+        reminder.number
+      );
+    } else if (reminder.msgType === "monthly") {
+      scheduleMonthlyTask(
+        reminder.jobId,
+        reminder.time.minute,
+        reminder.time.hour,
+        reminder.time.amPm,
+        reminder.time.dayOfMonth,
         reminder.message,
         client,
         reminder.number

@@ -70,6 +70,26 @@ function checkDate(type, date) {
       throw new Error("Invalid date. Please enter a date in the future.");
     }
     return true;
+  } else if (type === "setmonthly") {
+    // hh:mmAM dayofmonth
+    const dateRegex = /^\d{1,2}:\d{2}(AM|PM) \d{1,2}$/;
+    if (!dateRegex.test(date)) {
+      throw new Error(
+        "Invalid date format. Please use the format HH:MMAM/PM dayofmonth. Use /help for more info"
+      );
+    }
+
+    // Parse the input date in IST
+    const inputDate = moment.tz(date, "h:mmA", "Asia/Kolkata").toDate();
+    if (isNaN(inputDate.getTime())) {
+      throw new Error("Invalid date. Please enter a valid date.");
+    }
+
+    const currentDate = moment().tz("Asia/Kolkata").toDate();
+    if (inputDate < currentDate) {
+      throw new Error("Invalid date. Please enter a date in the future.");
+    }
+    return true;
   }
 }
 

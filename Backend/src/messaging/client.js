@@ -14,6 +14,7 @@ import handleSetWeekly from "./handleSetWeekly.js";
 import handleDeleteAll from "./handleDeleteAll.js";
 import handleHelp from "./handleHelp.js";
 import handleUpgrade from "./handleUpgrade.js";
+import handleMonthly from "./handleMonthly.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -32,6 +33,7 @@ client.on("ready", () => {
 });
 
 client.on("message", async (message) => {
+  console.log(message.body);
   if (message.from.endsWith("c.us")) {
     const chat = await message.getChat();
     const user = await UserData.findOne({ number: message.from });
@@ -65,6 +67,8 @@ client.on("message", async (message) => {
       await handleHelp(message, client);
     } else if (message.body.startsWith("/upgrade")) {
       await handleUpgrade(message, client);
+    } else if (message.body.startsWith("/setmonthly")) {
+      await handleMonthly(message, client);
     }
   }
 });
