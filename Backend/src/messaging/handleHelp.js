@@ -11,7 +11,7 @@ async function handleHelp(message, client) {
   7. */deleteall* - Delete all reminders.\n
   8. */help* - Show this help message.\n
   9. */upgrade* - Upgrade to premium for more features.\n
-
+  10. */bug "message"* - Report a bug.\n
   *Note:*\n
   - Day should be one of the following: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.\n
   - Date should be a number between 1 and 31.\n

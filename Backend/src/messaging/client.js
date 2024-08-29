@@ -16,6 +16,7 @@ import handleHelp from "./handleHelp.js";
 import handleUpgrade from "./handleUpgrade.js";
 import handleMonthly from "./handleMonthly.js";
 import handleUpgradeUser from "./handleUpgradeUser.js";
+import handleBug from "./handleBug.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -75,6 +76,8 @@ client.on("message", async (message) => {
       await handleUpgrade(message);
     } else if (message.body.startsWith("/setmonthly")) {
       await handleMonthly(message, client);
+    } else if (message.body.startsWith("/bug")) {
+      await handleBug(message, client);
     }
   }
 });
