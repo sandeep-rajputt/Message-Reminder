@@ -25,6 +25,9 @@ export default {
           grey: "#343a40",
         },
       },
+      backgroundImage: {
+        "hero-gradient": "linear-gradient(to right, #24293A, #5C6B82)",
+      },
     },
   },
   plugins: [],
