@@ -15,6 +15,7 @@ import handleDeleteAll from "./handleDeleteAll.js";
 import handleHelp from "./handleHelp.js";
 import handleUpgrade from "./handleUpgrade.js";
 import handleMonthly from "./handleMonthly.js";
+import handleUpgradeUser from "./handleUpgradeUser.js";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -50,9 +51,14 @@ client.on("message", async (message) => {
         return;
       }
     }
-
-    if (message.body.startsWith("/setmsg")) {
-      await handleSetMsg(message, client);
+    if (message.body.startsWith("/upgradeuser")) {
+      if (message.from.includes(process.env.ADMIN_NUMBER)) {
+        await handleUpgradeUser(message, client);
+      } else {
+        chat.sendMessage("You are not authorized to use this command.");
+      }
+    } else if (message.body.startsWith("/setmsg")) {
+      await handleSetMsg(message);
     } else if (message.body.startsWith("/list")) {
       await handleList(message);
     } else if (message.body.startsWith("/deleteall")) {
@@ -66,7 +72,7 @@ client.on("message", async (message) => {
     } else if (message.body.startsWith("/help")) {
       await handleHelp(message, client);
     } else if (message.body.startsWith("/upgrade")) {
-      await handleUpgrade(message, client);
+      await handleUpgrade(message);
     } else if (message.body.startsWith("/setmonthly")) {
       await handleMonthly(message, client);
     }
