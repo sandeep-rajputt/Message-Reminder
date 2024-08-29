@@ -57,7 +57,7 @@ const HeaderUser = () => {
             </div>
           </div>
           <Hr />
-          <div className="flex flex-col">
+          <div className="flex flex-col py-1">
             <HeadlessuiMenuItem href={"/setting"}>Setting</HeadlessuiMenuItem>
             <HeadlessuiMenuItem handleClick={handleLogout}>
               Sign out

@@ -8,9 +8,9 @@ const HeadlessuiMenuItem = ({
   href,
   handleClick,
 }) => {
-  const classes = "py-1 pl-6 tracking-tight hover:bg-light-hover";
+  const classes = "py-2 pl-6 tracking-tight hover:bg-light-hover";
   return (
-    <MenuItem className={`m-1 text-sm cursor-pointer ${className}`}>
+    <MenuItem className={`mx-1 text-sm cursor-pointer ${className}`}>
       {href ? (
         <Link to={href} className={classes}>
           {children}
