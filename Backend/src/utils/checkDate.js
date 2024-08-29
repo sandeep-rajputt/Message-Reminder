@@ -3,7 +3,7 @@ import moment from "moment";
 function checkDate(type, date) {
   if (type === "setmsg") {
     // Check if the date is in the correct format
-    const dateRegex = /^\d{2}\/\d{2}\/\d{4} \d{1,2}:\d{2}(AM|PM)$/;
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4} \d{1,2}:\d{2}(AM|PM|am|pm|Am|Pm)$/;
     if (!dateRegex.test(date)) {
       throw new Error(
         "Invalid date format. Please use the format DD/MM/YYYY HH:MM AM/PM. Use /help for more info."
@@ -31,7 +31,7 @@ function checkDate(type, date) {
     return true;
   } else if (type === "setdaily") {
     // Check if the date is in the correct format
-    const dateRegex = /^\d{1,2}:\d{2}(AM|PM)$/;
+    const dateRegex = /^\d{1,2}:\d{2}(AM|PM|am|pm|Am|Pm)$/;
     if (!dateRegex.test(date)) {
       throw new Error(
         "Invalid date format. Please use the format HH:MM AM/PM. Use /help for more info"
@@ -52,7 +52,7 @@ function checkDate(type, date) {
     return true;
   } else if (type === "setweekly") {
     const dateRegex =
-      /^\d{1,2}:\d{2}(AM|PM) (Monday|monday|mon|Mon|Tuesday|tuesday|tue|Tue|Wednesday|wednesday|wed|Wed|Thursday|thursday|thu|Thu|Friday|friday|fri|Fri|Saturday|saturday|sat|Sat|Sunday|sunday|sun|Sun)$/;
+      /^\d{1,2}:\d{2}(AM|PM|am|pm|Am|Pm) (Monday|monday|mon|Mon|Tuesday|tuesday|tue|Tue|Wednesday|wednesday|wed|Wed|Thursday|thursday|thu|Thu|Friday|friday|fri|Fri|Saturday|saturday|sat|Sat|Sunday|sunday|sun|Sun)$/;
     if (!dateRegex.test(date)) {
       throw new Error(
         "Invalid date format. Please use the format HH/MM Day. Use /help for more info"
@@ -72,7 +72,7 @@ function checkDate(type, date) {
     return true;
   } else if (type === "setmonthly") {
     // hh:mmAM dayofmonth
-    const dateRegex = /^\d{1,2}:\d{2}(AM|PM) \d{1,2}$/;
+    const dateRegex = /^\d{1,2}:\d{2}(AM|PM|am|pm|Am|Pm) \d{1,2}$/;
     if (!dateRegex.test(date)) {
       throw new Error(
         "Invalid date format. Please use the format HH:MMAM/PM dayofmonth. Use /help for more info"

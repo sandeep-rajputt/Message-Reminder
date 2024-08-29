@@ -5,9 +5,12 @@ import Reminder from "../models/reminder.model.js";
 
 function convert12To24Hour(hour12, period) {
   let hour = Number(hour12);
-  if (period === "PM" && hour12 !== 12) {
+  const isPM = period === "PM" || period === "Pm" || period === "pm";
+  const isAM = period === "AM" || period === "am" || period === "Am";
+
+  if (isPM && hour12 !== 12) {
     hour += 12;
-  } else if (period === "AM" && hour12 === 12) {
+  } else if (isAM && hour12 === 12) {
     hour = 0;
   }
   return hour;
