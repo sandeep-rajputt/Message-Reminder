@@ -26,7 +26,7 @@ export default {
         },
       },
       backgroundImage: {
-        "hero-gradient": "linear-gradient(to right, #24293A, #5C6B82)",
+        "hero-gradient": "linear-gradient(to right,  #181C27, #24293A)",
       },
     },
   },
