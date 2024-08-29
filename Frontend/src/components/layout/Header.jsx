@@ -3,6 +3,7 @@ import HoverBoxLink from "../common/HoverBoxLink";
 import DarkBgButton from "../common/DarkBgButton";
 import DarkBorderButton from "../common/DarkBorderButton";
 import LogoSvg from "../../assets/SVG Components/LogoSvg";
+import HeaderUser from "./HeaderUser";
 
 const Header = () => {
   const login = true;
@@ -28,9 +29,7 @@ const Header = () => {
               </li>
             </ul>
             <div className="flex items-center justify-center">
-              <button className="rounded-full overflow-hidden">
-                <img src="user.png" className="w-8 h-8" alt="user profile" />
-              </button>
+              <HeaderUser />
             </div>
           </div>
         ) : (

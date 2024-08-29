@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        geist: ["Geist", "sans-serif"],
+      },
       maxWidth: {
         device: "1600px",
       },

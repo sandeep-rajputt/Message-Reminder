@@ -5,7 +5,7 @@ import Header from "./components/layout/Header";
 
 const App = () => {
   return (
-    <div>
+    <div className="font-geist">
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
