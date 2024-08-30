@@ -68,6 +68,7 @@ async function handleSetMsg(message, client) {
     await user.save();
     chat.sendMessage("I will notify you at your specified time.");
   } catch (error) {
+    console.log(error);
     chat.sendMessage(error.message);
     return;
   }

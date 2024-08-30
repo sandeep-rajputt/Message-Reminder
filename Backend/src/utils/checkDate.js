@@ -23,8 +23,6 @@ function checkDate(type, date) {
 
     // Check if the date is in the future
     if (inputDate < currentDate) {
-      console.log("inputDate", inputDate);
-      console.log("futureDate", futureDate);
       throw new Error("Invalid date. Please enter a date in the future.");
     }
 

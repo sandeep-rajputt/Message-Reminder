@@ -59,7 +59,7 @@ client.on("message", async (message) => {
         chat.sendMessage("You are not authorized to use this command.");
       }
     } else if (message.body.startsWith("/setmsg")) {
-      await handleSetMsg(message);
+      await handleSetMsg(message, client);
     } else if (message.body.startsWith("/list")) {
       await handleList(message);
     } else if (message.body.startsWith("/deleteall")) {

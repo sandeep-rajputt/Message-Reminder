@@ -8,6 +8,7 @@ import {
 
 async function reScheduleTask(client) {
   const reminders = await Reminder.find();
+  if (reminders.length === 0) return;
   reminders.forEach((reminder) => {
     if (reminder.msgType === "setMsg") {
       scheduleTask(
@@ -18,7 +19,6 @@ async function reScheduleTask(client) {
         reminder.time.amPm,
         reminder.time.dayOfMonth,
         reminder.time.month,
-        reminder.time.dayOfWeek,
         reminder.message,
         client,
         reminder.number
