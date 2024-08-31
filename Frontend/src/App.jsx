@@ -4,6 +4,7 @@ import Home from "./pages/Home/Home";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Login from "./pages/Login/Login";
+import SignUp from "./pages/Signup/Signup";
 
 const App = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </div>
       <Footer />
