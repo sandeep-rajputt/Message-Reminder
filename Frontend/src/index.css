@@ -64,3 +64,7 @@
   font-weight: 900;
   font-style: normal;
 }
+
+body::-webkit-scrollbar {
+  display: none;
+}
