@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
 
 const App = () => {
   const location = useLocation();
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 };
