@@ -8,6 +8,8 @@ import Loader from "../../components/common/Loader";
 import PasswordInput from "../../components/common/PasswordInput";
 import AuthError from "../../components/common/AuthError";
 import NumberInput from "../../components/common/NumberInput";
+import { fetchUserData } from "../../store/slices/UserDataSlices";
+import { useDispatch } from "react-redux";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -21,6 +23,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
+  const dispatch = useDispatch();
 
   function handleCountryChange(e) {
     setCountry(e.target.value);
@@ -67,26 +70,37 @@ const SignUp = () => {
     if (email && !validateEmail(email)) {
       setError("Please enter a valid email");
       setLoading(false);
-      return;
+      return false;
     } else if (!password) {
       setError("Please enter a password");
       setLoading(false);
-      return;
+      return false;
     } else if (password.length < 8) {
       setError("Password must be at least 8 characters long");
       setLoading(false);
-      return;
+      return false;
     } else if (password !== confirmPassword) {
       setError("Passwords do not match");
       setLoading(false);
-      return;
+      return false;
+    } else if (!name) {
+      setError("Please enter your name");
+      setLoading(false);
+      return false;
+    } else if (!number) {
+      setError("Please enter your number");
+      setLoading(false);
+      return false;
     } else {
       setError("");
+      return true;
     }
   }
 
   function handleSubmit(e) {
-    checkData(e);
+    if (!checkData(e)) {
+      return;
+    }
 
     axios
       .post("/api/request-registration-otp", {
@@ -108,8 +122,9 @@ const SignUp = () => {
   }
 
   function handleOtpSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
+    if (!checkData(e)) {
+      return;
+    }
 
     if (!otp) {
       setError("Please enter the OTP");
@@ -127,8 +142,8 @@ const SignUp = () => {
         number: country + number,
         otp: otp,
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        dispatch(fetchUserData());
         navigate("/all-reminders");
       })
       .catch((err) => {
