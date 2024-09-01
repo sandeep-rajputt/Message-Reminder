@@ -6,7 +6,6 @@ import validateEmail from "../utils/validateEmail.js";
 import validateMobileNumber from "../utils/validateMobileNumber.js";
 import OtpData from "../models/otpData.model.js";
 import sendOtpNumber from "../utils/sendOtpNumber.js";
-import convertMilliseconds from "../utils/convertMilliseconds.js";
 import bcrypt from "bcrypt";
 
 router.post("/", async (req, res) => {
@@ -45,7 +44,7 @@ router.post("/", async (req, res) => {
 
   try {
     const isUserOtpExist = await OtpData.findOne({ number });
-    if (isUserExists) {
+    if (isUserOtpExist) {
       await OtpData.deleteOne({ number });
     }
 

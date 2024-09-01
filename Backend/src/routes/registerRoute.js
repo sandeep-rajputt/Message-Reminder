@@ -43,8 +43,7 @@ router.post("/", async (req, res) => {
     res.status(400).json({ error: false, message: "Invalid OTP" });
   } else {
     try {
-      const hashedOTP = await bcrypt.hash(otp, 10);
-      const isOtpValid = bcrypt.compare(hashedOTP, isOtpExist.otp);
+      const isOtpValid = await bcrypt.compare(otp.toString(), isOtpExist.otp);
       if (!isOtpValid) {
         res.status(400).json({ error: false, message: "Invalid OTP" });
       } else {
@@ -66,7 +65,7 @@ router.post("/", async (req, res) => {
         );
         res.cookie("token", token, {
           httpOnly: true,
-          secure: true,
+          secure: false,
           maxAge: 1000 * 60 * 60 * 24 * 30,
           sameSite: "strict",
         });

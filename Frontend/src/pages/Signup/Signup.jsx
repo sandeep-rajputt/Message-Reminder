@@ -188,6 +188,7 @@ const SignUp = () => {
                 value={otp}
               />
             </div>
+            {error && <AuthError>{error}</AuthError>}
             <DarkBgButton type="submit" className="w-full">
               {loading ? (
                 <div className="flex items-center justify-center">

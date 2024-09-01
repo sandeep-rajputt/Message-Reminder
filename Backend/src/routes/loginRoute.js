@@ -1,5 +1,4 @@
 import express from "express";
-import authenticateToken from "../utils/authenticateToken.js";
 import validateMobileNumber from "../utils/validateMobileNumber.js";
 import UserData from "../models/userData.model.js";
 const router = express.Router();
@@ -46,7 +45,7 @@ router.post("/", async (req, res) => {
       .status(200)
       .cookie("token", token, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24 * 30,
         sameSite: "strict",
       })

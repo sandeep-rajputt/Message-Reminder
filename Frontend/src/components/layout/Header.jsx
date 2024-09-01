@@ -24,9 +24,6 @@ const Header = () => {
           <div className="flex gap-3 items-center justify-center font-normal">
             <ul className="flex gap-3 items-center justify-center mr-1">
               <li>
-                <HoverBoxLink link="/dashboard" text="Dashboard" />
-              </li>
-              <li>
                 <HoverBoxLink link="/set-reminder" text="Set New Reminder" />
               </li>
               <li>
