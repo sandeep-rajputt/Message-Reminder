@@ -10,7 +10,6 @@ import HeaderUser from "./HeaderUser";
 const Header = () => {
   const userData = useSelector((state) => state.userData.userData);
   const status = useSelector((state) => state.userData.status);
-  console.log(status);
 
   return (
     <header className="fixed w-full bg-white flex items-center justify-center shadow-header z-10">

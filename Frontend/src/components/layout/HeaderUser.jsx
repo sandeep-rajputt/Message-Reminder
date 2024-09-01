@@ -5,11 +5,17 @@ import Textellipsis from "../common/Textellipsis";
 import Hr from "../common/Hr";
 import Overlay from "../common/Overlay";
 import ConfirmBox from "../common/ConfirmBox";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { clearUserData } from "../../store/slices/UserDataSlices";
+import { useDispatch } from "react-redux";
 
 const HeaderUser = ({ user }) => {
   const number = `+${user.number.slice(0, -5)}`;
   const image = user.image;
   const [logoutOverlay, setLogoutOverlay] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function handleLogout() {
     setLogoutOverlay(!logoutOverlay);
@@ -20,8 +26,18 @@ const HeaderUser = ({ user }) => {
   }
 
   function confirmLogout() {
-    console.log("Logout confirmed");
-    setLogoutOverlay(false);
+    axios
+      .get("/api/logout", { withCredentials: true })
+      .then(() => {
+        dispatch(clearUserData());
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLogoutOverlay(false);
+      });
   }
 
   return (
