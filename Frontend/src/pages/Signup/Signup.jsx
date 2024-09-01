@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DarkBgButton from "../../components/common/DarkBgButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Input from "../../components/common/Input";
 import validateEmail from "../../utils/validateEmail";
 import Loader from "../../components/common/Loader";
@@ -17,6 +18,9 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [number, setNumber] = useState("");
   const [country, setCountry] = useState("+91");
+  const navigate = useNavigate();
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
 
   function handleCountryChange(e) {
     setCountry(e.target.value);
@@ -56,10 +60,10 @@ const SignUp = () => {
     setName(e.target.value);
   }
 
-  function handleSubmit(e) {
+  function checkData(e) {
     e.preventDefault();
-
     setLoading(true);
+
     if (email && !validateEmail(email)) {
       setError("Please enter a valid email");
       setLoading(false);
@@ -79,109 +83,200 @@ const SignUp = () => {
     } else {
       setError("");
     }
+  }
 
-    if (error) {
+  function handleSubmit(e) {
+    checkData(e);
+
+    axios
+      .post("/api/request-registration-otp", {
+        name,
+        email,
+        password,
+        number: country + number,
+      })
+      .then(() => {
+        setOtpSent(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(err.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  function handleOtpSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!otp) {
+      setError("Please enter the OTP");
       setLoading(false);
+      return;
+    } else {
+      setError("");
     }
 
-    console.log("signup");
+    axios
+      .post("/api/register", {
+        name,
+        email,
+        password,
+        number: country + number,
+        otp: otp,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate("/all-reminders");
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(err.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
 
-    setLoading(false);
+  function handleOtpChange(e) {
+    setOtp(e.target.value);
   }
 
   return (
     <div className="flex items-center justify-center h-full py-14 px-5">
-      <form
-        className="w-full flex flex-col gap-14 max-w-lg shadow-inner-border rounded-md px-6 pt-10 pb-2"
-        onSubmit={handleSubmit}
-      >
-        <div>
-          <h2 className="text-2xl font-semibold">
-            Sign Up to Message Reminder
-          </h2>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <div>
-              <label className="font-medium" htmlFor="name">
-                Name
-              </label>
-            </div>
-            <Input
-              id="name"
-              placeholder={"Enter your Name"}
-              handleChange={handleName}
-              value={name}
-            />
+      {otpSent ? (
+        <form
+          className="w-full flex flex-col gap-14 max-w-lg shadow-inner-border rounded-md px-6 pt-10 pb-6"
+          onSubmit={handleOtpSubmit}
+        >
+          <div>
+            <h2 className="text-2xl font-semibold">Verify OTP</h2>
+            <p className="text-dark-grey/80">
+              Please enter the one-time password (OTP) sent to your registered
+              phone number via <span className="text-green-500">WhatsApp</span>
+            </p>
           </div>
-          <div className="flex flex-col gap-2">
-            <div>
-              <label className="font-medium">Number</label>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <div>
+                <label className="font-medium" htmlFor="name">
+                  OTP
+                </label>
+              </div>
+              <Input
+                id="name"
+                type="number"
+                placeholder={"Enter OTP"}
+                handleChange={handleOtpChange}
+                value={otp}
+              />
             </div>
-            <NumberInput
-              handleNumber={handleNumber}
-              value={number}
-              handleCountryChange={handleCountryChange}
-              country={country}
-            />
+            <DarkBgButton type="submit" className="w-full">
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <Loader color="white" />
+                </div>
+              ) : (
+                "Verify"
+              )}
+            </DarkBgButton>
           </div>
-          <div className="flex flex-col gap-2">
-            <div>
-              <label className="font-medium" htmlFor="email">
-                Email
-              </label>
-            </div>
-            <Input
-              type="email"
-              id="email"
-              require={false}
-              placeholder={"Enter your Email"}
-              handleChange={handleEmail}
-              value={email}
-            />
+        </form>
+      ) : (
+        <form
+          className="w-full flex flex-col gap-14 max-w-lg shadow-inner-border rounded-md px-6 pt-10 pb-2"
+          onSubmit={handleSubmit}
+        >
+          <div>
+            <h2 className="text-2xl font-semibold">
+              Sign Up to Message Reminder
+            </h2>
           </div>
-          <div className="flex flex-col gap-2">
-            <div>
-              <label className="font-medium" htmlFor="password">
-                Password
-              </label>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <div>
+                <label className="font-medium" htmlFor="name">
+                  Name
+                </label>
+              </div>
+              <Input
+                id="name"
+                placeholder={"Enter your Name"}
+                handleChange={handleName}
+                value={name}
+              />
             </div>
-            <PasswordInput
-              placeholder={"Enter your Password"}
-              handleChange={handlePassword}
-              value={password}
-            />
+            <div className="flex flex-col gap-2">
+              <div>
+                <label className="font-medium">Number</label>
+              </div>
+              <NumberInput
+                handleNumber={handleNumber}
+                value={number}
+                handleCountryChange={handleCountryChange}
+                country={country}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div>
+                <label className="font-medium" htmlFor="email">
+                  Email
+                </label>
+              </div>
+              <Input
+                type="email"
+                id="email"
+                require={false}
+                placeholder={"Enter your Email"}
+                handleChange={handleEmail}
+                value={email}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div>
+                <label className="font-medium" htmlFor="password">
+                  Password
+                </label>
+              </div>
+              <PasswordInput
+                placeholder={"Enter your Password"}
+                handleChange={handlePassword}
+                value={password}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div>
+                <label className="font-medium" htmlFor="password">
+                  Confirm Password
+                </label>
+              </div>
+              <PasswordInput
+                placeholder={"Confirm your Password"}
+                handleChange={handleConfirmPassword}
+                value={confirmPassword}
+              />
+            </div>
+            {error && <AuthError>{error}</AuthError>}
           </div>
-          <div className="flex flex-col gap-2">
-            <div>
-              <label className="font-medium" htmlFor="password">
-                Confirm Password
-              </label>
-            </div>
-            <PasswordInput
-              placeholder={"Confirm your Password"}
-              handleChange={handleConfirmPassword}
-              value={confirmPassword}
-            />
-          </div>
-          {error && <AuthError>{error}</AuthError>}
-        </div>
-        <DarkBgButton type="submit">
-          {loading ? (
-            <div className="flex items-center justify-center">
-              <Loader color="white" />
-            </div>
-          ) : (
-            "Sign Up"
-          )}
-        </DarkBgButton>
-        <p className="text-center">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-500 hover:underline">
-            Log In
-          </Link>
-        </p>
-      </form>
+          <DarkBgButton type="submit">
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <Loader color="white" />
+              </div>
+            ) : (
+              "Sign Up"
+            )}
+          </DarkBgButton>
+          <p className="text-center">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500 hover:underline">
+              Log In
+            </Link>
+          </p>
+        </form>
+      )}
     </div>
   );
 };

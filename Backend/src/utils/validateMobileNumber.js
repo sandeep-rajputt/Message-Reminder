@@ -1,3 +1,5 @@
+import { error } from "qrcode-terminal";
+
 /**
  * Validates the mobile number
  * - Minimum length of 10 characters
@@ -10,12 +12,18 @@
  */
 export default function validateMobileNumber(mobileNumber) {
   if (typeof mobileNumber !== "string") {
-    return { error: "Invalid mobile number format: " + mobileNumber };
+    return {
+      error: true,
+      message: "Invalid mobile number format: " + mobileNumber,
+    };
   }
 
   // Check if the number starts with + or a digit
   if (!/^\+?\d/.test(mobileNumber)) {
-    return { error: "Invalid mobile number format: " + mobileNumber };
+    return {
+      error: true,
+      message: "Invalid mobile number format: " + mobileNumber,
+    };
   }
 
   // Remove the leading + if present
@@ -24,15 +32,19 @@ export default function validateMobileNumber(mobileNumber) {
     : mobileNumber;
 
   // Validate length
-  if (numberWithoutPlus.length < 10 || numberWithoutPlus.length > 15) {
-    return { error: "Invalid mobile number length: " + mobileNumber };
+  if (numberWithoutPlus.length < 10 || numberWithoutPlus.length > 20) {
+    return {
+      error: true,
+      message: "Invalid mobile number length: " + mobileNumber,
+    };
   }
 
   // Check if all characters are digits
   const mobileNumberRegex = /^\d+$/;
   if (!mobileNumberRegex.test(numberWithoutPlus)) {
     return {
-      error:
+      error: true,
+      message:
         "Mobile number should contain only digits after the initial +: " +
         mobileNumber,
     };

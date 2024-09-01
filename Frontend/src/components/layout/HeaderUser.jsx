@@ -6,7 +6,9 @@ import Hr from "../common/Hr";
 import Overlay from "../common/Overlay";
 import ConfirmBox from "../common/ConfirmBox";
 
-const HeaderUser = () => {
+const HeaderUser = ({ user }) => {
+  const number = `+${user.number.slice(0, -5)}`;
+  const image = user.image;
   const [logoutOverlay, setLogoutOverlay] = useState(false);
 
   function handleLogout() {
@@ -41,18 +43,14 @@ const HeaderUser = () => {
         >
           <div className="grid grid-cols-[auto_1fr] gap-1 px-3 py-1">
             <div className="flex items-center justify-center px-2">
-              <img
-                src="user.png"
-                className="w-6 h-6 min-w-6"
-                alt="user profile"
-              />
+              <img src={image} className="w-6 h-6 min-w-6" alt="user profile" />
             </div>
             <div className="flex flex-col overflow-hidden">
               <Textellipsis className={"font-semibold overflow-hidden"}>
-                John Doe
+                {user.name}
               </Textellipsis>
               <Textellipsis className={"font-normal text-xs text-dark-grey/90"}>
-                +91 9876543210
+                {number}
               </Textellipsis>
             </div>
           </div>

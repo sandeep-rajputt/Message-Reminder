@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const otpSchema = new Schema({
   number: {
-    type: Number,
+    type: String,
     require: true,
   },
   otp: {

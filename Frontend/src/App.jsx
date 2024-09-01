@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/Signup/Signup";
+import AllReminders from "./pages/All Reminders/AllReminders";
+import { useDispatch } from "react-redux";
+import { fetchUserData } from "./store/slices/UserDataSlices";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
 
 const App = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
+
   return (
-    <div className="font-geist">
+    <div className="font-geist min-h-screen grid grid-rows-[1fr_auto]">
       <Header />
       <div
         className={`pt-[71.98px] ${
@@ -21,6 +30,14 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/all-reminders"
+            element={
+              <ProtectedRoute>
+                <AllReminders />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
       <Footer />

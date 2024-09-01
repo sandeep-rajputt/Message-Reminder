@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import DarkBgButton from "../../components/common/DarkBgButton";
-import { Link } from "react-router-dom";
-import Input from "../../components/common/Input";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../components/common/Loader";
 import AuthError from "../../components/common/AuthError";
 import NumberInput from "../../components/common/NumberInput";
+import axios from "axios";
+import PasswordInput from "../../components/common/PasswordInput";
+import { fetchUserData } from "../../store/slices/UserDataSlices";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [number, setNumber] = useState("");
@@ -12,6 +15,8 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState("+91");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function handleCountryChange(e) {
     setCountry(e.target.value);
@@ -59,7 +64,27 @@ const Login = () => {
       setError("");
     }
 
-    setLoading(false);
+    axios
+      .post(
+        "/api/login",
+        {
+          number: country + number,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(() => {
+        dispatch(fetchUserData());
+        navigate("/all-reminders");
+      })
+      .catch((err) => {
+        setError(err.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -84,11 +109,12 @@ const Login = () => {
             />
           </div>
           <div className="flex flex-col-reverse gap-2">
-            <Input
+            <PasswordInput
               placeholder={"Enter your Password"}
               handleChange={handlePassword}
               value={password}
             />
+
             <div className="flex justify-between items-center font-medium">
               <label>Password</label>
               <Link

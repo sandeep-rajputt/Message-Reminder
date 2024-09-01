@@ -10,44 +10,42 @@ import convertMilliseconds from "../utils/convertMilliseconds.js";
 import bcrypt from "bcrypt";
 
 router.post("/", async (req, res) => {
-  const { number, name, password, email } = req.body;
+  const { name, password, email } = req.body;
+  let { number } = req.body;
+  number = number.toString();
 
   if (!validatePassword(password)) {
-    return res.status(400).json({ error: "Invalid password" });
+    return res.status(400).json({
+      error: true,
+      message:
+        "Password must be 8 characters long and contain at least one digit",
+    });
   } else if (!name) {
-    return res.status(400).json({ error: "Invalid name" });
+    return res.status(400).json({ error: true, message: "please enter name" });
   }
   const validNumber = validateMobileNumber(number);
   if (validNumber.error) {
-    return res.status(400).json({ error: validNumber.error });
+    return res.status(400).json({ error: true, message: validNumber.message });
   }
+
+  number = `${number.toString().slice(1, number.length)}@c.us`;
 
   if (email) {
     if (!validateEmail(email)) {
-      return res.status(400).json({ error: "Invalid email" });
+      return res.status(400).json({ error: true, message: "Invalid email" });
     }
   }
 
   const isUserExists = await UserData.findOne({ number: number });
   if (isUserExists) {
-    return res.status(400).json({ error: "User already exists" });
+    return res
+      .status(400)
+      .json({ error: true, message: "This number is already registered" });
   }
 
   try {
     const isUserOtpExist = await OtpData.findOne({ number });
-
-    if (isUserOtpExist) {
-      const currentTime = Date.now();
-      const otpCreatedTime = isUserOtpExist.createdAt.getTime();
-      const timeRemaining = 180000 - (currentTime - otpCreatedTime);
-
-      if (timeRemaining > 0) {
-        const expirationDate = new Date(currentTime + timeRemaining);
-        const timeleft = convertMilliseconds(timeRemaining);
-        return res.status(400).json({
-          error: `Please request OTP again after ${timeleft.minutes} minutes ${timeleft.seconds} seconds`,
-        });
-      }
+    if (isUserExists) {
       await OtpData.deleteOne({ number });
     }
 
@@ -56,9 +54,7 @@ router.post("/", async (req, res) => {
     await OtpData.create({ number: number, otp: hashedOTP });
     return res.status(200).json({ message: "OTP sent successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "An error occurred", error: error.message });
+    return res.status(500).json({ message: error.message, error: true });
   }
 });
 

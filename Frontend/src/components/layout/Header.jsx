@@ -1,4 +1,6 @@
+// src/components/Header.js
 import React from "react";
+import { useSelector } from "react-redux";
 import HoverBoxLink from "../common/HoverBoxLink";
 import DarkBgButton from "../common/DarkBgButton";
 import DarkBorderButton from "../common/DarkBorderButton";
@@ -6,7 +8,9 @@ import LogoSvg from "../../assets/SVG Components/LogoSvg";
 import HeaderUser from "./HeaderUser";
 
 const Header = () => {
-  const login = true;
+  const userData = useSelector((state) => state.userData.userData);
+  const status = useSelector((state) => state.userData.status);
+  console.log(status);
 
   return (
     <header className="fixed w-full bg-white flex items-center justify-center shadow-header z-10">
@@ -15,7 +19,9 @@ const Header = () => {
           <LogoSvg />
           <h1 className="text-2xl font-semibold">Message Reminder</h1>
         </div>
-        {login ? (
+        {status === "loading" || status === "idle" ? (
+          <></>
+        ) : userData ? (
           <div className="flex gap-3 items-center justify-center font-normal">
             <ul className="flex gap-3 items-center justify-center mr-1">
               <li>
@@ -29,7 +35,7 @@ const Header = () => {
               </li>
             </ul>
             <div className="flex items-center justify-center">
-              <HeaderUser />
+              <HeaderUser user={userData} />
             </div>
           </div>
         ) : (

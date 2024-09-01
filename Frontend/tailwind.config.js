@@ -29,6 +29,24 @@ export default {
       backgroundImage: {
         "hero-gradient": "linear-gradient(to right,  #181C27, #24293A)",
       },
+      keyframes: {
+        spin89345: {
+          "0%": {
+            transform: "rotate(0deg)",
+          },
+          "100%": {
+            transform: "rotate(360deg)",
+          },
+        },
+        pulse0112: {
+          "0%, 100%": { transform: "scale(0)", opacity: "0.5" },
+          "50%": { transform: "scale(1)", opacity: "1" },
+        },
+      },
+      animation: {
+        spin89345: "spin89345 1s linear infinite",
+        pulse0112: "pulse0112 calc(0.9s * 1.111) ease-in-out infinite",
+      },
     },
   },
   plugins: [],
