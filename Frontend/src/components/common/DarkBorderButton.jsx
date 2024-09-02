@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const DarkBorderButton = ({
-  handleClick = "",
+  handleClick = () => {},
   children,
   link = "",
   className = "",

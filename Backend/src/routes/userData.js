@@ -18,6 +18,7 @@ router.get("/", authenticateToken, async (req, res) => {
         email: user.email,
         messages: user.messages,
         image: user.image,
+        userId: user._id,
       },
     });
   } catch (error) {

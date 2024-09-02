@@ -110,27 +110,27 @@ async function scheduleWeeklyTask(
   number
 ) {
   const hour = convert12To24Hour(hour12, period);
-  const week = "";
+  let week = "";
   switch (dayOfWeek) {
-    case "Monday" || "Mon" || "mon" || "Mon":
+    case "Monday" || "Mon" || "mon" || "Mon" || "1":
       week = "1";
       break;
-    case "Tuesday" || "Tue" || "tue" || "Tue":
+    case "Tuesday" || "Tue" || "tue" || "Tue" || "2":
       week = "2";
       break;
-    case "Wednesday" || "Wed" || "wed" || "Wed":
+    case "Wednesday" || "Wed" || "wed" || "Wed" || "3":
       week = "3";
       break;
-    case "Thursday" || "Thu" || "thu" || "Thu":
+    case "Thursday" || "Thu" || "thu" || "Thu" || "4":
       week = "4";
       break;
-    case "Friday" || "Fri" || "fri" || "Fri":
+    case "Friday" || "Fri" || "fri" || "Fri" || "5":
       week = "5";
       break;
-    case "Saturday" || "Sat" || "sat" || "Sat":
+    case "Saturday" || "Sat" || "sat" || "Sat" || "6":
       week = "6";
       break;
-    case "Sunday" || "Sun" || "sun" || "Sun":
+    case "Sunday" || "Sun" || "sun" || "Sun" || "0":
       week = "0";
       break;
     default:
@@ -186,7 +186,6 @@ async function scheduleMonthlyTask(
     client.sendMessage(number, message);
   }
   try {
-    console.log("set : ", message);
     schedule.scheduleJob(jobId, cronString, () => {
       client.sendMessage(number, message);
     });
