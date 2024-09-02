@@ -40,7 +40,6 @@ router.post("/", async (req, res) => {
         expiresIn: "30d",
       }
     );
-    console.log("send response");
     res
       .status(200)
       .cookie("token", token, {
