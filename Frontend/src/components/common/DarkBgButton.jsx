@@ -8,7 +8,7 @@ const DarkBgButton = ({
   link = "",
   className = "",
 }) => {
-  const styelCss = `py-2 px-4 size-bold rounded-md bg-dark font-medium inline-block text-center text-white hover:bg-dark-hover ${className}`;
+  const styelCss = `py-2 px-4 size-bold rounded-md bg-dark font-medium inline-block text-center text-white hover:bg-dark-hover hover:text-white hover:no-underline ${className}`;
   if (link === "") {
     return (
       <button type={type} className={`${styelCss}`} onClick={handleClick}>

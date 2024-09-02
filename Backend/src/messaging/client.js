@@ -23,17 +23,20 @@ const client = new Client({
   puppeteer: { headless: true },
 });
 
+// Generate QR code for authentication
 client.on("qr", (qr) => {
   console.log("ready for qrcode");
   qrcode.generate(qr, { small: true });
   console.log("Scan the QR code above to log in.");
 });
 
+// Handle client readiness
 client.on("ready", () => {
   console.log("Client is ready!");
   reScheduleTask(client);
 });
 
+// Handle incoming messages
 client.on("message", async (message) => {
   console.log(message.body);
   if (message.from.endsWith("c.us")) {
@@ -82,26 +85,50 @@ client.on("message", async (message) => {
   }
 });
 
+// Initialize the client
+const retry = (attempts = 0) => {
+  const delay = Math.min(1000 * 2 ** attempts, 30000);
+  setTimeout(() => {
+    client.initialize().catch((error) => {
+      console.error("Reconnection failed:", error);
+      retry(attempts + 1);
+    });
+  }, delay);
+};
+
 client.initialize();
 console.log("client initialized");
 
-// handle errors if disconnect
+// Handle errors and reconnect with backoff strategy
 client.on("disconnected", (reason) => {
   console.log("Client was logged out due to", reason);
-  client.destroy().then(() => client.initialize());
+  client.destroy().then(() => retry());
 });
 
 client.on("auth_failure", (msg) => {
   console.error("Authentication failure:", msg);
-  client.destroy().then(() => client.initialize());
+  client.destroy().then(() => retry());
 });
 
 client.on("error", (error) => {
   console.error("Error occurred:", error);
   if (error.message.includes("Execution context was destroyed")) {
     console.log("Reinitializing client due to context destruction...");
-    client.destroy().then(() => client.initialize());
+    client.destroy().then(() => retry());
   }
+});
+
+// Graceful shutdown
+process.on("SIGINT", async () => {
+  console.log("Shutting down gracefully...");
+  await client.destroy();
+  process.exit(0);
+});
+
+process.on("SIGTERM", async () => {
+  console.log("Shutting down gracefully...");
+  await client.destroy();
+  process.exit(0);
 });
 
 export default client;
