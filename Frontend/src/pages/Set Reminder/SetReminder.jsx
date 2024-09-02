@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUserData } from "../../store/slices/UserDataSlices";
 import Loader from "../../components/common/Loader";
 import Overlay from "../../components/common/Overlay";
-import SuccesfullMessageSet from "./SuccesfullMessageSet";
+import MessageSet from "../../components/common/MessageSet";
 
 const daysOfWeek = [
   "Sunday",
@@ -228,7 +228,10 @@ const SetReminder = () => {
       </form>
       {overlay && (
         <Overlay>
-          <SuccesfullMessageSet handleCloseModal={handleCloseModal} />
+          <MessageSet
+            handleCloseModal={handleCloseModal}
+            succes={"Your reminder has been set successfully."}
+          />
         </Overlay>
       )}
     </div>
