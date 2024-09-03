@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
 
   const isOtpExist = await OtpData.findOne({ number: number });
   if (!isOtpExist) {
-    res.status(400).json({ error: false, message: "Invalid OTP" });
+    res.status(400).json({ error: false, message: "Please Request new OTP" });
   } else {
     try {
       const isOtpValid = await bcrypt.compare(otp.toString(), isOtpExist.otp);
@@ -69,7 +69,6 @@ router.post("/", async (req, res) => {
           maxAge: 1000 * 60 * 60 * 24 * 30,
           sameSite: "strict",
         });
-        console.log(token);
         res
           .status(200)
           .json({ error: false, message: "User registered successfully" });
