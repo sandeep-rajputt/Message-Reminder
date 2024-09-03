@@ -33,6 +33,7 @@ const SetReminder = () => {
   const [day, setDay] = useState("Sunday");
   const [date, setDate] = useState("");
   const [overlay, setOverlay] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!userData.userData) {
@@ -57,6 +58,7 @@ const SetReminder = () => {
   };
   function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     if (!selectedDate) {
       setError("Please select a date and time");
       return;
@@ -114,6 +116,9 @@ const SetReminder = () => {
       })
       .catch((err) => {
         setError(err.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
@@ -223,7 +228,13 @@ const SetReminder = () => {
         </div>
         {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="flex items-center justify-end">
-          <DarkBgButton type="submit">Set Reminder</DarkBgButton>
+          <DarkBgButton disabled={loading} type="submit">
+            {loading ? (
+              <Loader className="border-white border-opacity-100" />
+            ) : (
+              "Set Reminder"
+            )}
+          </DarkBgButton>
         </div>
       </form>
       {overlay && (

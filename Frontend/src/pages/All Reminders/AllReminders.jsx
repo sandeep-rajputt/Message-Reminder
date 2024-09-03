@@ -5,17 +5,18 @@ import { fetchUserData } from "../../store/slices/UserDataSlices";
 import Loader from "../../components/common/Loader";
 import { FaRegCalendarCheck } from "react-icons/fa6";
 import DarkBgButton from "../../components/common/DarkBgButton";
+import { useLocation } from "react-router-dom";
 
 const AllReminders = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
   const loadingStatus = userData.status;
+  const location = useLocation();
 
   useEffect(() => {
-    if (!userData.userData) {
-      dispatch(fetchUserData());
-    }
-  }, [dispatch, userData.userData]);
+    // Re-fetch user data every time the location changes
+    dispatch(fetchUserData());
+  }, [dispatch, location]);
 
   if (loadingStatus === "idle" || loadingStatus === "loading") {
     return (
@@ -34,7 +35,7 @@ const AllReminders = () => {
           <div className="flex justify-end">
             <DarkBgButton link="/set-reminder">Create Reminder</DarkBgButton>
           </div>
-          <div className="flex flex-wrap  gap-4">
+          <div className="flex flex-wrap gap-4">
             {messages.map((message, index) => (
               <ReminderBox key={index} message={message} />
             ))}
