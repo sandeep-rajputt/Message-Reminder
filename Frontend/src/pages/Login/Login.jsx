@@ -127,7 +127,7 @@ const Login = () => {
           </div>
           {error && <AuthError>{error}</AuthError>}
         </div>
-        <DarkBgButton type={"submit"} className="w-full">
+        <DarkBgButton disabled={loading} type={"submit"} className="w-full">
           {loading ? (
             <div className="flex items-center justify-center">
               <Loader color="white" />{" "}

@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { fetchUserData } from "./store/slices/UserDataSlices";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import SetReminder from "./pages/Set Reminder/SetReminder";
+import Error from "./pages/Error/Error";
 
 const App = () => {
   const location = useLocation();
@@ -47,6 +48,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<Error />} />
         </Routes>
       </div>
       <Footer />
