@@ -5,7 +5,7 @@ import client from "../messaging/client.js";
 import Reminder from "../models/reminder.model.js";
 import { deleteTask } from "../utils/scheduleTask.js";
 
-router.post("/", authenticateToken, async (req, res) => {
+router.delete("/", authenticateToken, async (req, res) => {
   const { jobId } = req.body;
 
   try {

@@ -11,13 +11,12 @@ import { fetchUserData } from "./store/slices/UserDataSlices";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import SetReminder from "./pages/Set Reminder/SetReminder";
 import Error from "./pages/Error/Error";
+import Setting from "./pages/Setting";
 
 const App = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUserData());
-  }, [dispatch]);
+  dispatch(fetchUserData());
 
   return (
     <div className="font-geist min-h-screen grid grid-rows-[1fr_auto]">
@@ -45,6 +44,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <SetReminder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/setting"
+            element={
+              <ProtectedRoute>
+                <Setting />
               </ProtectedRoute>
             }
           />

@@ -18,7 +18,7 @@ const ReminderBox = ({ message }) => {
 
   function confirmDelete() {
     axios
-      .post(
+      .delete(
         "/api/deleteReminder",
         { jobId: selectedJob },
         { withCredentials: true }
