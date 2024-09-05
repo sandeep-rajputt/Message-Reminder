@@ -62,7 +62,7 @@ const Header = () => {
       <div className="relative flex justify-between px-6 py-4 max-w-device w-full">
         <div className="flex gap-2 items-center justify-center">
           <LogoSvg />
-          <h1 className="text-2xl font-semibold pt-1">
+          <h1 className="sm:text-2xl text-lg font-semibold pt-1">
             <Link
               className="text-black hover:text-dark active:text-dark focus:text-dark focus:no-underline"
               to="/"

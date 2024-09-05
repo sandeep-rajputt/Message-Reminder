@@ -50,15 +50,15 @@ const Features = () => {
     <section className="flex items-center justify-center">
       <div className="max-w-device w-full py-28 flex flex-col justify-center items-center gap-20 px-20">
         <div className="grid gap-5 ">
-          <h3 className="text-5xl font-bold text-center">
+          <h3 className="xl:text-5xl text-3xl font-bold text-center">
             Features That Matter
           </h3>
-          <p className="text-center text-dark-grey text-lg">
+          <p className="text-center text-dark-grey md:text-lg text-base">
             Message Reminder offers a suite of powerful features to help you
             never forget an important message.
           </p>
         </div>
-        <div className="grid grid-cols-[1fr_1fr_1fr] gap-10">
+        <div className="grid lg:grid-cols-[1fr_1fr_1fr] md:grid-cols-[1fr_1fr] grid-cols-1 gap-10">
           {featuresData.map((item, index) => {
             return (
               <div

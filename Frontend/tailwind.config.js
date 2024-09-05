@@ -48,6 +48,19 @@ export default {
         pulse0112: "pulse0112 calc(0.9s * 1.111) ease-in-out infinite",
       },
     },
+    screens: {
+      sm: "386px",
+      // => @media (min-width: 640px) { ... }
+
+      md: "650px",
+      // => @media (min-width: 768px) { ... }
+
+      lg: "1024px",
+      // => @media (min-width: 1024px) { ... }
+
+      xl: "1171px",
+      // => @media (min-width: 1280px) { ... }
+    },
   },
   plugins: [],
 };
