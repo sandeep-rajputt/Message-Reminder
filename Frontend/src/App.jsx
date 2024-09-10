@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/routes/ProtectedRoute";
 import SetReminder from "./pages/Set Reminder/SetReminder";
 import Error from "./pages/Error/Error";
 import Setting from "./pages/Setting";
+import ForgotPassword from "./pages/Forgot Password/ForgotPassword";
 
 const App = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/all-reminders"
             element={
