@@ -17,12 +17,13 @@ const ReminderBox = ({ message }) => {
   }
 
   function confirmDelete() {
+    console.log(selectedJob);
+
     axios
-      .delete(
-        "/api/deleteReminder",
-        { jobId: selectedJob },
-        { withCredentials: true }
-      )
+      .delete("/api/deleteReminder", {
+        data: { jobId: selectedJob }, // Pass jobId correctly using the `data` field
+        withCredentials: true,
+      })
       .finally(() => {
         setSelectedJob(null);
         setDeleteOverlay(false);
@@ -32,8 +33,10 @@ const ReminderBox = ({ message }) => {
 
   return (
     <div className="w-full flex flex-col justify-between max-w-96 border rounded-md p-3">
-      <div className="flex items-center justify-between fl w-full mb-2">
-        <p className="font-medium text-lg break-words">{message.date}</p>
+      <div className="flex justify-between items-center">
+        <span className="inline-block border px-1 rounded-md bg-slate-200">
+          {message.messageType}
+        </span>
         <button
           className="border rounded px-2 py-2"
           onClick={() => {
@@ -43,6 +46,9 @@ const ReminderBox = ({ message }) => {
         >
           <MdDelete className="text-md" />
         </button>
+      </div>
+      <div className="flex items-center justify-between fl w-full mb-2">
+        <p className="font-medium text-lg break-words">{message.date}</p>
       </div>
       <Hr />
       <p className="mt-2 font-medium break-words text-md">{message.message}</p>

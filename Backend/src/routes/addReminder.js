@@ -118,6 +118,7 @@ router.post("/", authenticateToken, async (req, res) => {
         jobId: jobId,
         message: message,
         date: `${dayOfMonth}/${month}/${year} ${hour}:${minute}${amPm}`,
+        messageType: "One Time",
       });
       await user.save();
       res.status(200).json({ error: false, message: "Reminder added" });
@@ -148,6 +149,7 @@ router.post("/", authenticateToken, async (req, res) => {
         jobId: jobId,
         message: message,
         date: `${hour}:${minute}${amPm}`,
+        messageType: "Daily",
       });
       await user.save();
       res.status(200).json({ error: false, message: "Reminder added" });
@@ -188,6 +190,7 @@ router.post("/", authenticateToken, async (req, res) => {
         jobId: jobId,
         message: message,
         date: `${hour}:${minute}${amPm} ${dayOfWeek}`,
+        messageType: "Weekly",
       });
       await user.save();
       res.status(200).json({ error: false, message: "Reminder added" });
@@ -228,6 +231,7 @@ router.post("/", authenticateToken, async (req, res) => {
         jobId: jobId,
         message: message,
         date: `${hour}:${minute}${amPm} ${dayOfMonth}`,
+        messageType: "Monthly",
       });
       await user.save();
       res.status(200).json({ error: false, message: "Reminder added" });

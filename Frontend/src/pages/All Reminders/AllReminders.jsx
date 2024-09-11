@@ -35,7 +35,7 @@ const AllReminders = () => {
           <div className="flex justify-end">
             <DarkBgButton link="/set-reminder">Create Reminder</DarkBgButton>
           </div>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 justify-center">
             {messages.map((message, index) => (
               <ReminderBox key={index} message={message} />
             ))}
