@@ -13,6 +13,7 @@ import SetReminder from "./pages/Set Reminder/SetReminder";
 import Error from "./pages/Error/Error";
 import Setting from "./pages/Setting";
 import ForgotPassword from "./pages/Forgot Password/ForgotPassword";
+import { ResetPassword } from "./pages/Reset Password/ResetPassword";
 
 const App = () => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/set-reminder"
             element={

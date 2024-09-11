@@ -12,7 +12,8 @@ const HeroSection = () => {
             </h2>
             <p className="md:text-xl text-base text-white/80 text-center xl:text-start max-w-4xl">
               Message Reminder is a service that allows you to set and manage
-              reminders that are sent directly to your WhatsApp. Never miss an
+              reminders that are sent directly to your{" "}
+              <span className="text-green-500">WhatsApp</span>. Never miss an
               important message again.
             </p>
             <LightBgButton link="/signup" className="px-5 w-fit">
