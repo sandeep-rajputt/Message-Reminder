@@ -113,7 +113,6 @@ const SignUp = () => {
         setOtpSent(true);
       })
       .catch((err) => {
-        console.log(err);
         setError(err.response.data.message);
       })
       .finally(() => {
@@ -147,7 +146,6 @@ const SignUp = () => {
         navigate("/all-reminders");
       })
       .catch((err) => {
-        console.log(err);
         setError(err.response.data.message);
       })
       .finally(() => {

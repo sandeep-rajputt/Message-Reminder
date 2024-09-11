@@ -17,11 +17,9 @@ const ReminderBox = ({ message }) => {
   }
 
   function confirmDelete() {
-    console.log(selectedJob);
-
     axios
       .delete("/api/deleteReminder", {
-        data: { jobId: selectedJob }, // Pass jobId correctly using the `data` field
+        data: { jobId: selectedJob },
         withCredentials: true,
       })
       .finally(() => {

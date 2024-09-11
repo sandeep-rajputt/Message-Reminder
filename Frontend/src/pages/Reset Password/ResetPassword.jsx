@@ -49,21 +49,17 @@ export const ResetPassword = () => {
     const token = getTokenFromUrl();
     setToken(token);
     if (token) {
-      console.log("enter if");
       axios
         .post("/api/verify-reset-token", { token })
         .then(() => {
-          console.log("Token is not expired");
           setTokenExpired(false);
         })
         .catch(() => {
-          console.log("Token is expired or invalid");
           setTokenExpired(true);
         });
     } else {
       setTokenExpired(true);
     }
-    console.log(pageLoading);
     if (pageLoading) {
       setPageLoading(false);
     }

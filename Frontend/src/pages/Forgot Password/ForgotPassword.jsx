@@ -45,13 +45,11 @@ const ForgotPassword = () => {
       .post("/api/forgot-password", {
         number: country + number,
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         setError("");
         setIsLinkSent(true);
       })
       .catch((err) => {
-        console.log(err);
         setError(err.response.data.message);
       })
       .finally(() => {
