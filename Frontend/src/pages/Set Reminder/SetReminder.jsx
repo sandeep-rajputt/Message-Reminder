@@ -61,9 +61,11 @@ const SetReminder = () => {
     setLoading(true);
     if (!selectedDate) {
       setError("Please select a date and time");
+      setLoading(false);
       return;
     } else if (!message) {
       setError("Please enter a message");
+      setLoading(false);
       return;
     }
 
