@@ -1,10 +1,18 @@
 import jsonwebtoken from "jsonwebtoken";
+import ExpiredToken from "../models/expiredToken.model.js";
 
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
   const { token } = req.cookies;
 
   if (!token) {
     return res.status(401).json({ error: true, message: "Unauthorized" });
+  }
+
+  const isExpired = await ExpiredToken.findOne({ token });
+  if (isExpired) {
+    return res
+      .status(401)
+      .json({ error: true, message: "Token has already been used" });
   }
 
   jsonwebtoken.verify(token, process.env.JWT_SECRET, (err, user) => {

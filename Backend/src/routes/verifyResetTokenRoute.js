@@ -1,12 +1,20 @@
 import express from "express";
 const router = express.Router();
 import jsonwebtoken from "jsonwebtoken";
+import ExpiredToken from "../models/expiredToken.model.js";
 
 // verify reset password token route
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { token } = req.body;
   if (!token) {
     return res.status(400).json({ error: true, message: "Token is required" });
+  }
+
+  const isExpired = await ExpiredToken.findOne({ token });
+  if (isExpired) {
+    return res
+      .status(403)
+      .json({ error: true, message: "Token has already been used" });
   }
 
   jsonwebtoken.verify(token, process.env.JWT_SECRET, (err, decoded) => {
