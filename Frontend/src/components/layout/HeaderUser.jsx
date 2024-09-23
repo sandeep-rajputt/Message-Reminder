@@ -9,6 +9,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { clearUserData } from "../../store/slices/UserDataSlices";
 import { useDispatch } from "react-redux";
+import DarkBorderButton from "../common/DarkBorderButton";
 
 const HeaderUser = ({ user }) => {
   const number = `+${user.number.slice(0, -5)}`;
@@ -76,6 +77,12 @@ const HeaderUser = ({ user }) => {
             <HeadlessuiMenuItem handleClick={handleLogout}>
               Sign out
             </HeadlessuiMenuItem>
+            <DarkBorderButton
+              className="mx-2 mt-2"
+              link="https://github.com/sandeep-rajputt/Message-Reminder"
+            >
+              Leave a ⭐ on Github
+            </DarkBorderButton>
           </div>
         </MenuItems>
         {logoutOverlay && (

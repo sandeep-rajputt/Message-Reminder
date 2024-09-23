@@ -134,6 +134,13 @@ const Header = () => {
                       Sign Out
                     </DarkBgButton>
                   </li>
+                  <li className={`${isMobile && "mt-2"}`}>
+                    <button tabIndex={-1}>
+                      <DarkBorderButton link="https://github.com/sandeep-rajputt/Message-Reminder">
+                        Leave a ⭐ on Github
+                      </DarkBorderButton>
+                    </button>
+                  </li>
                 </ul>
               ) : (
                 <div className="flex items-center justify-center">
@@ -157,6 +164,13 @@ const Header = () => {
                   <li>
                     <button tabIndex={-1} onClick={handleClick}>
                       <DarkBorderButton link="/login">Log In</DarkBorderButton>
+                    </button>
+                  </li>
+                  <li>
+                    <button tabIndex={-1}>
+                      <DarkBorderButton link="https://github.com/sandeep-rajputt/Message-Reminder">
+                        Leave a ⭐ on Github
+                      </DarkBorderButton>
                     </button>
                   </li>
                 </ul>
