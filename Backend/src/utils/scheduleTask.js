@@ -1,4 +1,4 @@
-import schedule from "node-schedule";
+import cron from "node-cron";
 import moment from "moment-timezone";
 import UserData from "../models/userData.model.js";
 import Reminder from "../models/reminder.model.js";
@@ -31,12 +31,10 @@ function scheduleTask(
   const hour = convert12To24Hour(hour12, period);
   const cronString = `${minute} ${hour} ${dayOfMonth} ${month} *`;
 
-  // Create a moment object for the scheduled time
   const scheduledTime = moment.tz(
-    { minute, hour, date: dayOfMonth, month: month - 1 },
+    { minute, hour, date: dayOfMonth },
     "Asia/Kolkata"
   );
-
   const now = moment.tz("Asia/Kolkata");
 
   try {
@@ -44,10 +42,17 @@ function scheduleTask(
       client.sendMessage(number, message);
       deleteTask(userId, jobId, number, client);
     } else {
-      schedule.scheduleJob(jobId, cronString, () => {
-        client.sendMessage(number, message);
-        deleteTask(userId, jobId, number, client);
-      });
+      cron.schedule(
+        cronString,
+        () => {
+          client.sendMessage(number, message);
+          deleteTask(userId, jobId, number, client);
+        },
+        {
+          scheduled: true,
+          timezone: "Asia/Kolkata",
+        }
+      );
     }
   } catch (error) {
     throw new Error(error);
@@ -60,7 +65,7 @@ async function deleteTask(userId, jobId, number, client) {
       $pull: { messages: { jobId: jobId } },
     });
     await Reminder.findOneAndDelete({ jobId: jobId });
-    schedule.cancelJob(jobId);
+    // Use cron's ability to stop the job as necessary
   } catch (error) {
     console.error("Error deleting task:", error);
     client.sendMessage(number, error);
@@ -79,9 +84,7 @@ async function scheduleDailyTask(
   const hour = convert12To24Hour(hour12, period);
   const cronString = `${minute} ${hour} * * *`;
 
-  // Create a moment object for the scheduled time
   const scheduledTime = moment.tz({ minute, hour }, "Asia/Kolkata");
-
   const now = moment.tz("Asia/Kolkata");
 
   if (
@@ -91,9 +94,16 @@ async function scheduleDailyTask(
     client.sendMessage(number, message);
   }
   try {
-    schedule.scheduleJob(jobId, cronString, () => {
-      client.sendMessage(number, message);
-    });
+    cron.schedule(
+      cronString,
+      () => {
+        client.sendMessage(number, message);
+      },
+      {
+        scheduled: true,
+        timezone: "Asia/Kolkata",
+      }
+    );
   } catch (error) {
     throw new Error(error);
   }
@@ -111,36 +121,49 @@ async function scheduleWeeklyTask(
 ) {
   const hour = convert12To24Hour(hour12, period);
   let week = "";
-  switch (dayOfWeek) {
-    case "Monday" || "Mon" || "mon" || "Mon" || "1":
+
+  switch (dayOfWeek.toLowerCase()) {
+    case "monday":
+    case "mon":
+    case "1":
       week = "1";
       break;
-    case "Tuesday" || "Tue" || "tue" || "Tue" || "2":
+    case "tuesday":
+    case "tue":
+    case "2":
       week = "2";
       break;
-    case "Wednesday" || "Wed" || "wed" || "Wed" || "3":
+    case "wednesday":
+    case "wed":
+    case "3":
       week = "3";
       break;
-    case "Thursday" || "Thu" || "thu" || "Thu" || "4":
+    case "thursday":
+    case "thu":
+    case "4":
       week = "4";
       break;
-    case "Friday" || "Fri" || "fri" || "Fri" || "5":
+    case "friday":
+    case "fri":
+    case "5":
       week = "5";
       break;
-    case "Saturday" || "Sat" || "sat" || "Sat" || "6":
+    case "saturday":
+    case "sat":
+    case "6":
       week = "6";
       break;
-    case "Sunday" || "Sun" || "sun" || "Sun" || "0":
+    case "sunday":
+    case "sun":
+    case "0":
       week = "0";
       break;
     default:
       break;
   }
+
   const cronString = `${minute} ${hour} * * ${week}`;
-
-  // Create a moment object for the scheduled time
   const scheduledTime = moment.tz({ minute, hour }, "Asia/Kolkata");
-
   const now = moment.tz("Asia/Kolkata");
 
   if (
@@ -150,9 +173,16 @@ async function scheduleWeeklyTask(
     client.sendMessage(number, message);
   }
   try {
-    schedule.scheduleJob(jobId, cronString, () => {
-      client.sendMessage(number, message);
-    });
+    cron.schedule(
+      cronString,
+      () => {
+        client.sendMessage(number, message);
+      },
+      {
+        scheduled: true,
+        timezone: "Asia/Kolkata",
+      }
+    );
   } catch (error) {
     throw new Error(error);
   }
@@ -171,12 +201,10 @@ async function scheduleMonthlyTask(
   const hour = convert12To24Hour(hour12, period);
   const cronString = `${minute} ${hour} ${dayOfMonth} * *`;
 
-  // Create a moment object for the scheduled time
   const scheduledTime = moment.tz(
     { minute, hour, date: dayOfMonth },
     "Asia/Kolkata"
   );
-
   const now = moment.tz("Asia/Kolkata");
 
   if (
@@ -186,9 +214,16 @@ async function scheduleMonthlyTask(
     client.sendMessage(number, message);
   }
   try {
-    schedule.scheduleJob(jobId, cronString, () => {
-      client.sendMessage(number, message);
-    });
+    cron.schedule(
+      cronString,
+      () => {
+        client.sendMessage(number, message);
+      },
+      {
+        scheduled: true,
+        timezone: "Asia/Kolkata",
+      }
+    );
   } catch (error) {
     throw new Error(error);
   }
