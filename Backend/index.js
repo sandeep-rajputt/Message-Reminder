@@ -6,6 +6,7 @@ import router from "./src/routes/router.js";
 import client from "./src/messaging/client.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import bot from "./src/telegrambot/bot.js";
 dotenv.config();
 
 const app = express();
