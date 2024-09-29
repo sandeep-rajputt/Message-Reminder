@@ -13,7 +13,7 @@ function convert12To24Hour(hour12, period) {
   } else if (isAM && hour12 === 12) {
     hour = 0;
   }
-  return hour;
+  return hour - 1;
 }
 
 function scheduleTask(
@@ -94,6 +94,8 @@ async function scheduleDailyTask(
     client.sendMessage(number, message);
   }
   try {
+    console.log("Scheduling daily task");
+    console.log(cronString);
     cron.schedule(
       cronString,
       () => {

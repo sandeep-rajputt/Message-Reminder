@@ -3,12 +3,9 @@ import mongoose from "mongoose";
 
 const userSchema = new Schema(
   {
-    number: {
-      type: String,
-      require: true,
-    },
     name: {
       type: String,
+      require: [true, "Name is required"],
       default: "Unknown User",
     },
     messages: {
@@ -21,16 +18,47 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      require: true,
+      require: false,
+      validate: {
+        validator: function (v) {
+          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/.test(
+            v
+          );
+        },
+        message:
+          "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
+      },
     },
     email: {
       type: String,
-      require: false,
+      require: true,
+      unique: [true, "Email already exists"],
+      validate: {
+        validator: function (v) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        message: "Please enter a valid email",
+      },
     },
     image: {
       type: String,
       require: false,
       default: "user.png",
+    },
+    telegramId: {
+      type: Number,
+      require: false,
+      unique: [true, "Telegram ID already exists"],
+    },
+    instagramId: {
+      type: Number,
+      require: false,
+      unique: [true, "Instagram ID already exists"],
+    },
+    number: {
+      type: String,
+      require: false,
+      unique: [true, "Whatsapp number already exists"],
     },
   },
   { timestamps: true }
