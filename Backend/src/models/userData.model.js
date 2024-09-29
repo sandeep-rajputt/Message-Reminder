@@ -50,11 +50,6 @@ const userSchema = new Schema(
       require: false,
       unique: [true, "Telegram ID already exists"],
     },
-    instagramId: {
-      type: Number,
-      require: false,
-      unique: [true, "Instagram ID already exists"],
-    },
     number: {
       type: String,
       require: false,
