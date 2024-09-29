@@ -1,6 +1,7 @@
 import { Telegraf } from "telegraf";
 import handleBug from "./handleBug.js";
 import handleUpgradeUser from "./handleUpgradeUser.js";
+import handleUpgrade from "./handleUpgrade.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -24,6 +25,8 @@ bot.on("message", (ctx) => {
     } else {
       ctx.reply("You are not authorized to use this command.");
     }
+  } else if (message.startsWith("/upgrade")) {
+    handleUpgrade(ctx);
   }
 });
 
